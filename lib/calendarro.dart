@@ -12,6 +12,7 @@ abstract class DayTileBuilder {
 }
 
 enum DisplayMode { MONTHS, WEEKS }
+
 enum SelectionMode { SINGLE, MULTI, RANGE }
 
 typedef void DateTimeCallback(DateTime datetime);
@@ -88,11 +89,8 @@ class Calendarro extends StatefulWidget {
 
   int getPositionOfDate(DateTime date) {
     final start = startDate;
-    if (start == null) {
-      throw StateError('startDate is null');
-    }
     int daysDifference = date.difference(DateUtils.toMidnight(start)).inDays;
-    int weekendsDifference = ((daysDifference + start.weekday) / 7).toInt();
+    int weekendsDifference = (daysDifference + start.weekday) ~/ 7;
     var position = daysDifference - weekendsDifference * 2;
     return position;
   }
@@ -155,7 +153,7 @@ class CalendarroState extends State<Calendarro> {
   void setCurrentDate(DateTime date) {
     setState(() {
       int page = widget.getPageForDate(date);
-      pageView?.controller.jumpToPage(page);
+      pageView?.controller?.jumpToPage(page);
     });
   }
 
